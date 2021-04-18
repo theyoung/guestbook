@@ -32,8 +32,7 @@ jobs:
             exit 1;
 
   push-frontend:
-    build:
-      machine: true
+    machine: true
     steps:
       - checkout
       - run: 
