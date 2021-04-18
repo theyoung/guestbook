@@ -47,7 +47,6 @@ jobs:
       - run:
           name: docker image upload
           command: |
-            cd php-redis
             ./upload_docker.sh
       - run:
           name: success
