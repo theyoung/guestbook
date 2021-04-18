@@ -9,7 +9,7 @@ jobs:
       - run:
           name: install php
           command: |
-            sudo apt install php7.3 php7.3-common php7.3-opcache php7.3-cli php7.3-gd php7.3-curl php7.3-mysql
+            sudo apt install php
             echo php -v
       - run:
           name: phplint env setup
