@@ -10,7 +10,8 @@ dockerpath="stevenna/guestbook"
 # Step 2:  
 # Authenticate & tag
 echo "Docker ID and Image: $dockerpath"
-docker login
+# docker login
+echo "user --> $DOCKER_USER"
 docker tag stevenna/guestbook:latest $dockerpath:latest
 
 # Step 3:

@@ -29,17 +29,65 @@ jobs:
           when: on_fail
           command: |
             echo 'php lint failed'
+            exit 1;
 
-  setup-eks:
-    docker:
-      - image: amazon/aws-cli
-    steps:
-      - checkout
-      - run:
-          name: check progress
+    push-frontend:
+      build:
+        machine: true
+      steps:
+        - checkout
+        - run: 
+            name : login
+            command: |
+              echo "$DOCKER_PASS" | docker login --username $DOCKER_USER --password-stdin
+        - run:
+            name: docker image build
+            command: |
+              ./run_docker.sh
+        - run:
+          name: docker image upload
           command: |
-            echo 'php lint passing'
+              ./upload_docker.sh
+        - run:
+          name: success
+          when: on_success
+          command: |
+            echo 'image upload success'
+        - run:
+            name: fail
+            when: on_fail
+            command: |
+              echo 'image upload fail'
+              exit 1;
 
+    setup-eks:
+      docker:
+        - image: amazon/aws-cli
+      steps:
+        - checkout
+        - run:
+            name: install dependencies
+            command: |
+              yum install tar gzip
+              curl --silent --location "https://github.com/weaveworks/eksctl/releases/download/latest_release/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp  
+              mv /tmp/eksctl /usr/local/bin
+        - run:
+            name: check eks cluster existed
+            command: |
+              existed=$(eksctl get cluster | egrep -i -o 'EKS-cluster')
+              if [[ $myvalue == *"EKS-cluster"* ]];then
+                exit 0;
+              else
+                eksctl create clusster -f .circleci/eks.yaml
+              fi
+        - run:
+            name: fail
+            when: on_fail
+            command: |
+              echo 'eks setup failed'
+        - save_cache:
+            paths: [.kube/config]
+            key: kubeconfig
 
 workflows:
   default:
@@ -48,5 +96,7 @@ workflows:
           filters:
             branches:
               only: [circleci-project-setup]
-      - setup-eks: #eks setup
+      - push-frontend: #image push
           requires: [build-frontend]
+      - setup-eks: #eks setup
+          requires: [build-frontend, push-frontend]
