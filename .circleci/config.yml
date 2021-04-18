@@ -6,30 +6,30 @@ jobs:
       - image: circleci/node:latest
     steps:
       - checkout
-      - run:
-          name: install php
-          command: |
-            sudo apt install php
-            echo php -v
-      - run:
-          name: phplint env setup
-          command: |
-            sudo npm i -g phplint
-      - run:
-          name: check phplint
-          command: |
-            ./phplint.sh
-      - run:
-          name: success
-          when: on_success
-          command: |
-            echo 'success php lint'
-      - run:
-          name: fail
-          when: on_fail
-          command: |
-            echo 'php lint failed'
-            exit 1;
+      # - run:
+      #     name: install php
+      #     command: |
+      #       sudo apt install php
+      #       echo php -v
+      # - run:
+      #     name: phplint env setup
+      #     command: |
+      #       sudo npm i -g phplint
+      # - run:
+      #     name: check phplint
+      #     command: |
+      #       ./phplint.sh
+      # - run:
+      #     name: success
+      #     when: on_success
+      #     command: |
+      #       echo 'success php lint'
+      # - run:
+      #     name: fail
+      #     when: on_fail
+      #     command: |
+      #       echo 'php lint failed'
+      #       exit 1;
 
   push-frontend:
     machine: true
@@ -47,6 +47,8 @@ jobs:
       - run:
           name: docker image upload
           command: |
+            pwd
+            ls -al
             ./upload_docker.sh
       - run:
           name: success
