@@ -42,11 +42,11 @@ jobs:
       - run:
           name: docker image build
           command: |
-            ./run_docker.sh
+            ./php-redis/run_docker.sh
       - run:
           name: docker image upload
           command: |
-            ./upload_docker.sh
+            ./php-redis/upload_docker.sh
       - run:
           name: success
           when: on_success
