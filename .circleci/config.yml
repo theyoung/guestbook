@@ -7,6 +7,12 @@ jobs:
     steps:
       - checkout
       - run:
+          name: install php
+          command: |
+            sudo apt install php libapache2-mod-php
+            sudo systemctl restart apache2
+            echo php -v
+      - run:
           name: phplint env setup
           command: |
             sudo npm i -g phplint
