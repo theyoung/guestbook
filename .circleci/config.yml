@@ -15,8 +15,31 @@ jobs:
           name: phplint env setup
           command: |
             sudo npm i -g phplint
-            phplint "php-redis/*.php"
-  # setup-eks:
+      - run:
+          name: check phplint
+          command: |
+            ./phplint.sh
+      - run:
+          name: success
+          when: on_success
+          command: |
+            echo 'success php lint'
+      - run:
+          name: fail
+          when: on_fail
+          command: |
+            echo 'php lint failed'
+
+  setup-eks:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - run:
+          name: check progress
+          command: |
+            echo 'php lint passing'
+
 
 workflows:
   default:
@@ -25,4 +48,5 @@ workflows:
           filters:
             branches:
               only: [circleci-project-setup]
-      # - setup-eks #eks setup
+      - setup-eks: #eks setup
+          requires: [build-frontend]
