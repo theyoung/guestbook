@@ -1,23 +1,23 @@
 apiVersion: apps/v1 #  for k8s versions before 1.9.0 use apps/v1beta2  and before 1.8.0 use extensions/v1beta1
 kind: Deployment
 metadata:
-  name: frontend-green
+  name: frontend-$COLOR
   labels:
-    color: green
+    color: $COLOR
 
 spec:
   selector:
     matchLabels:
       app: guestbook
       tier: frontend
-      color: green
+      color: $COLOR
   replicas: 3
   template:
     metadata:
       labels:
         app: guestbook
         tier: frontend
-        color: green
+        color: $COLOR
     spec:
       containers:
       - name: php-redis
