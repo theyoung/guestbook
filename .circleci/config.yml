@@ -83,8 +83,8 @@ jobs:
   deploy-backend:
     docker:
       - image: amazon/aws-cli
-    environment:
-      COLOR: blue
+    # environment:
+    #   COLOR: blue
     steps:
       - checkout
       - run:
@@ -116,7 +116,31 @@ jobs:
           name: green deploy and service change (blue/green)
           command: |
             ./check-env.sh
-            echo $COLOR
+            cat color.val
+      - run:
+          name: service working check or rollback
+          command: |
+            externalUrl=kubectl describe service frontend | grep "LoadBalancer Ingress:" | awk '{print $3}'
+            echo $externalUrl
+            curl --request GET $externalUrl --max-time 3
+      - run:
+          name: fail and rollback
+          when: on_fail
+          command: |
+            if [ -f color.val ]; then
+                COLOR=$(cat color.val)
+                if [[ $COLOR=="blue" ]];then
+                      echo "$COLOR has been load failed => green rollback"
+                      COLOR=green
+                    else
+                      echo "$COLOR has been load failed => blue rollback"
+                      COLOR=blue
+                fi
+                envsubst < frontend-service.yaml | kubectl apply -f -
+            else
+                echo "No file, No need to rollback"    
+            fi
+
 
 workflows:
   default:
