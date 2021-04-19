@@ -93,9 +93,7 @@ jobs:
       - run:
           name: check config and copy and paste
           command: |
-            cd /root/project/.kube/config
-            ls -al
-            cp -r config /config/.kube
+            cp -r /root/project/.kube/config /config/.kube/config
       - run:
           name: redis master deployment
           command: |
