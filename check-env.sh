@@ -13,4 +13,4 @@ kubectl delete deployments "frontend-$COLOR" #make sure delete
 
 echo "$COLOR deploy and start"
 envsubst < frontend-deployment.yaml | kubectl apply -f -
-envsubst < frontend-service.yaml | kubectl patch service frontend --patch-file -
+envsubst < frontend-service.yaml | kubectl apply -f -
