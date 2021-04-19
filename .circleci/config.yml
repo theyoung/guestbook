@@ -95,7 +95,7 @@ jobs:
           command: |
             cd ..
             ls -al
-            sudo cp -r /root/project/.kube/config /config/.kube/config
+            cp -r /root/project/.kube/config /config/.kube/config
       - run:
           name: redis master deployment
           command: |
