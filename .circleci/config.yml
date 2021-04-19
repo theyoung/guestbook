@@ -85,17 +85,18 @@ jobs:
   
   deploy-backend:
     docker:
-      - image: wernight/kubectl
+      - image: amazon/aws-cli
     steps:
       - checkout
-      - restore_cache:
-          key: kubeconfig
       - run:
           name: check config and copy and paste
           command: |
-            cd /
-            ls -al
-            cp -r /root/project/.kube/config /config/.kube/config
+            curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.17.17/bin/linux/amd64/kubectl
+            chmod +x ./kubectl
+            mv ./kubectl /usr/local/bin/kubectl
+            kubectl version --client
+      - restore_cache:
+          key: kubeconfig
       - run:
           name: redis master deployment
           command: |
