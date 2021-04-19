@@ -5,5 +5,5 @@ if [[ $existed == *"EKS-cluster"* ]];then
     exit 0;
 else
     echo 'eksctl cluster not existed'
-    eksctl create cluster -f .circleci/eks.yaml
+    eksctl create cluster -f .circleci/eks.yml
 fi
