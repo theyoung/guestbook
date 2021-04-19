@@ -1,9 +1,16 @@
 #!/bin/bash
 
-myvalue=$(kubectl describe service frontend | egrep -o -i 'green')
+myvalue=$(kubectl describe service frontend | egrep -o -i 'blue')
 
-if [[ $myvalue == *"green"* ]];then
-        exit 0;
+if [[ $myvalue == *"blue"* ]];then
+        COLOR=green
     else
-        exit 1;
+        COLOR=blue
 fi
+
+echo "$COLOR deleting deployments"
+kubectl delete deployments "frontend-$COLOR" #make sure delete
+
+echo "$COLOR deploy and start"
+envsubst < frontend-deployment.yaml | kubectl apply -f -
+envsubst < frontend-service.yaml | kubectl patch service frontend --patch-file -

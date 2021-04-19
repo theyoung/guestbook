@@ -16,4 +16,4 @@ spec:
   selector:
     app: guestbook
     tier: frontend
-    color: green
+    color: $COLOR
