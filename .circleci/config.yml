@@ -73,15 +73,16 @@ jobs:
       - run:
           name: check eks cluster existed
           command: |
-            eksctl version
-            eksctl get cluster
-            existed=$(eksctl get cluster | egrep -i -o 'EKS-cluster')
-            echo $existed
-            if [[ $existed == *"EKS-cluster"* ]];then
-              exit 0;
-            else
-              eksctl create cluster -f .circleci/eks.yaml
-            fi
+            # eksctl version
+            # eksctl get cluster
+            # existed=$(eksctl get cluster | egrep -i -o 'EKS-cluster')
+            # echo $existed
+            # if [[ $existed == *"EKS-cluster"* ]];then
+            #   exit 0;
+            # else
+            #   eksctl create cluster -f .circleci/eks.yaml
+            # fi
+            ./check-eks.sh
       - save_cache:
           paths: [.kube/config]
           key: kubeconfig
