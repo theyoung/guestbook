@@ -145,13 +145,13 @@ jobs:
 workflows:
   default:
     jobs:
-      # - build-frontend: #checkout php, lint php
-      #     filters:
-      #       branches:
-      #         only: [circleci-project-setup]
-      # - push-frontend: #image push
-      #     requires: [build-frontend]
-      # - setup-eks #eks setup
-          # requires: [build-frontend, push-frontend]
-      - deploy-backend
-          # requires: [setup-eks]
+      - build-frontend: #checkout php, lint php
+          filters:
+            branches:
+              only: [circleci-project-setup]
+      - push-frontend: #image push
+          requires: [build-frontend]
+      - setup-eks: #eks setup
+          requires: [push-frontend]
+      - deploy-backend:
+          requires: [setup-eks]
