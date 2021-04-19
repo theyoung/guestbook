@@ -85,7 +85,7 @@ jobs:
   
   deploy-backend:
     docker:
-      - image: bitnami/kubectl
+      - image: wernight/kubectl
     steps:
       - checkout
       - restore_cache:
@@ -95,7 +95,7 @@ jobs:
           command: |
             cd ~/.kube/
             ls -al
-            cp -r config /.kube/config
+            cp -r config /config/.kube
       - run:
           name: redis master deployment
           command: |
