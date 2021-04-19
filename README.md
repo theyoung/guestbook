@@ -64,6 +64,13 @@ Follow the tutorial at https://kubernetes.io/docs/tutorials/stateless-applicatio
 - Inspecting php codes to lint are via a phplint module on the build-frontend step.
 ![image](https://user-images.githubusercontent.com/6824701/115211660-bdd59b80-a13a-11eb-9ad4-cc76b68f729b.png)
 
+##### Add a Failed Case
+- To make sure, php linting is working well. modify the guestbook.php at the end of page.
+![image](https://user-images.githubusercontent.com/6824701/115233498-f4b7ab80-a152-11eb-83f5-67bc06c5875c.png)
+- Pipeling will be broken because the php file does not passed by linting
+![image](https://user-images.githubusercontent.com/6824701/115233086-722eec00-a152-11eb-874f-17a7eb044577.png)
+
+
 - Build docker Image modified and push it on my docker hub
 ![image](https://user-images.githubusercontent.com/6824701/115212143-2b81c780-a13b-11eb-9951-5c941903ec17.png)
 ![image](https://user-images.githubusercontent.com/6824701/115212205-39374d00-a13b-11eb-9400-2a055babd2ae.png)
