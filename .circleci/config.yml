@@ -5,62 +5,56 @@ jobs:
     docker:
       - image: circleci/node:latest
     steps:
+      - checkout
       - run:
-          command:
-            echo "pass"
-      # - checkout
-      # - run:
-      #     name: install php
-      #     command: |
-      #       sudo apt install php
-      #       echo php -v
-      # - run:
-      #     name: phplint env setup
-      #     command: |
-      #       sudo npm i -g phplint
-      # - run:
-      #     name: check phplint
-      #     command: |
-      #       ./phplint.sh
-      # - run:
-      #     name: success
-      #     when: on_success
-      #     command: |
-      #       echo 'success php lint'
-      # - run:
-      #     name: fail
-      #     when: on_fail
-      #     command: |
-      #       echo 'php lint failed'
-      #       exit 1;
+          name: install php
+          command: |
+            sudo apt install php
+            echo php -v
+      - run:
+          name: phplint env setup
+          command: |
+            sudo npm i -g phplint
+      - run:
+          name: check phplint
+          command: |
+            ./phplint.sh
+      - run:
+          name: success
+          when: on_success
+          command: |
+            echo 'success php lint'
+      - run:
+          name: fail
+          when: on_fail
+          command: |
+            echo 'php lint failed'
+            exit 1;
 
   push-frontend:
     machine: true
     steps:
+      - checkout
+      - run: 
+          name : login
+          command: |
+            echo "$DOCKER_PASS" | docker login --username $DOCKER_USER --password-stdin
       - run:
-          command:
-            echo "pass"
-      # - checkout
-      # - run: 
-      #     name : login
-      #     command: |
-      #       echo "$DOCKER_PASS" | docker login --username $DOCKER_USER --password-stdin
-      # - run:
-      #     name: docker image build
-      #     command: |
-      #       cd php-redis
-      #       ./run_docker.sh
-      # - run:
-      #     name: success
-      #     when: on_success
-      #     command: |
-      #       echo 'image upload success'
-      # - run:
-      #     name: fail
-      #     when: on_fail
-      #     command: |
-      #       echo 'image upload fail'
-      #       exit 1;
+          name: docker image build
+          command: |
+            cd php-redis
+            ./run_docker.sh
+      - run:
+          name: success
+          when: on_success
+          command: |
+            echo 'image upload success'
+      - run:
+          name: fail
+          when: on_fail
+          command: |
+            echo 'image upload fail'
+            exit 1;
 
   setup-eks:
     docker:
@@ -80,7 +74,7 @@ jobs:
           name: check eks cluster existed
           command: |
             existed=$(eksctl get cluster | egrep -i -o 'EKS-cluster')
-            if [[ $myvalue == *"EKS-cluster"* ]];then
+            if [[ $existed == *"EKS-cluster"* ]];then
               exit 0;
             else
               eksctl create clusster -f .circleci/eks.yaml
@@ -97,11 +91,11 @@ jobs:
 workflows:
   default:
     jobs:
-      - build-frontend: #checkout php, lint php
-          filters:
-            branches:
-              only: [circleci-project-setup]
-      - push-frontend: #image push
-          requires: [build-frontend]
-      - setup-eks: #eks setup
-          requires: [build-frontend, push-frontend]
+      # - build-frontend: #checkout php, lint php
+      #     filters:
+      #       branches:
+      #         only: [circleci-project-setup]
+      # - push-frontend: #image push
+      #     requires: [build-frontend]
+      - setup-eks #eks setup
+          # requires: [build-frontend, push-frontend]
