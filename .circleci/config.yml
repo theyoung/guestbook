@@ -74,9 +74,9 @@ jobs:
           name: check eks cluster existed
           command: |
             ./check-eks.sh
-      - save_cache:
-          paths: [.kube/config]
-          key: kubeconfig
+      # - save_cache:
+      #     paths: [.kube/config]
+      #     key: kubeconfig
       - run:
           name: fail
           when: on_fail
@@ -96,8 +96,9 @@ jobs:
             chmod +x ./kubectl
             mv ./kubectl /usr/local/bin/kubectl
             kubectl version --client
-      - restore_cache:
-          key: kubeconfig
+            aws eks --region $AWS_DEFAULT_REGION update-kubeconfig --name EKS-cluster
+      # - restore_cache:
+      #     key: kubeconfig
       - run:
           name: redis master deployment
           command: |
