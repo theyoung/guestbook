@@ -84,7 +84,7 @@ Follow the tutorial at https://kubernetes.io/docs/tutorials/stateless-applicatio
 
 
 Now you can browse this service with below a url.
-https://a4fd555d73e53456cb7bf4a461f75621-412994592.us-west-2.elb.amazonaws.com
+http://a4fd555d73e53456cb7bf4a461f75621-412994592.us-west-2.elb.amazonaws.com/
 
 
 
