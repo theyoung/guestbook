@@ -73,15 +73,6 @@ jobs:
       - run:
           name: check eks cluster existed
           command: |
-            # eksctl version
-            # eksctl get cluster
-            # existed=$(eksctl get cluster | egrep -i -o 'EKS-cluster')
-            # echo $existed
-            # if [[ $existed == *"EKS-cluster"* ]];then
-            #   exit 0;
-            # else
-            #   eksctl create cluster -f .circleci/eks.yaml
-            # fi
             ./check-eks.sh
       - save_cache:
           paths: [.kube/config]
@@ -91,6 +82,36 @@ jobs:
           when: on_fail
           command: |
             echo 'eks setup failed'
+  
+  deploy-backend:
+    docker:
+      - image: bitnami/kubectl
+    steps:
+      - checkout
+      - restore_cache:
+          key: kubeconfig
+      - run:
+          name: check config and copy and paste
+          command: |
+            cd ~/.kube/
+            ls -al
+            cp -r config /.kube/config
+      - run:
+          name: redis master deployment
+          command: |
+            kubectl apply -f redis-master-deployment.yaml
+      - run:
+          name: redis master service
+          command: |
+            kubectl apply -f redis-master-service.yaml
+      - run:
+          name: redis slave deployment
+          command: |
+            kubectl apply -f redis-slave-deployment.yaml
+      - run:
+          name: redis slave service
+          command: |
+            kubectl apply -f redis-slave-service.yaml
 
 workflows:
   default:
@@ -103,3 +124,5 @@ workflows:
       #     requires: [build-frontend]
       - setup-eks #eks setup
           # requires: [build-frontend, push-frontend]
+      - deploy-backend:
+          requires: [setup-eks]
