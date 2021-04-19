@@ -14,6 +14,7 @@
 
 FROM php:5-apache
 
+RUN pear upgrade PEAR
 RUN pear channel-discover pear.nrk.io
 RUN pear install nrk/Predis
 
