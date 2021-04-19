@@ -93,7 +93,7 @@ jobs:
       - run:
           name: check config and copy and paste
           command: |
-            cd ..
+            cd /
             ls -al
             cp -r /root/project/.kube/config /config/.kube/config
       - run:
