@@ -120,7 +120,7 @@ jobs:
       - run:
           name: service working check or rollback
           command: |
-            externalUrl=kubectl describe service frontend | grep "LoadBalancer Ingress:" | awk '{print $3}'
+            externalUrl=$(kubectl describe service frontend | grep "LoadBalancer Ingress:" | awk '{print $3}')
             echo $externalUrl
             curl --request GET $externalUrl --max-time 3
       - run:
