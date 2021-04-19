@@ -80,7 +80,7 @@ jobs:
             if [[ $existed == *"EKS-cluster"* ]];then
               exit 0;
             else
-              eksctl create clusster -f .circleci/eks.yaml
+              eksctl create cluster -f .circleci/eks.yaml
             fi
       - save_cache:
           paths: [.kube/config]
